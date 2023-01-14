@@ -24,11 +24,6 @@ struct PersonalDataView: View {
                     Text("25")
                 }
             }
-            Section("Параметры") {
-                NavigationLink("Настроить параметры") {
-                    CategoriesSettingsView()
-                }
-            }
             Section("Последние данные") {
                 if !viewModel.lastParameters.isEmpty {
                     ForEach(viewModel.lastParameters) { parameter in
@@ -43,12 +38,13 @@ struct PersonalDataView: View {
                 } else {
                     Text("Пока данных нет")
                 }
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Добавить") {
+                Button("Добавить данные") {
                     viewModel.addNewParametersPresented.toggle()
+                }
+            }
+            Section("Параметры") {
+                NavigationLink("Настроить параметры") {
+                    CategoriesSettingsView()
                 }
             }
         }

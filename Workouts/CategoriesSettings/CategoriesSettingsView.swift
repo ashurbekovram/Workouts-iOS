@@ -22,36 +22,36 @@ struct CategoriesSettingsView: View {
                 Section {
                     Toggle("Показывать все", sources: $service.categories, isOn: \.show)
                 }
-            }
-            Section {
-                ForEach ($service.categories, editActions: [.move]) { $category in
-                    Button {
-                        categoryToEdit = category
-                    } label: {
-                        Toggle(isOn: $category.show) {
-                            HStack {
-                                Text("\(category.name) (\(category.metricSystem.shortTitle))")
-                                if category.protected {
-                                    Image(systemName: "lock")
+                Section {
+                    ForEach ($service.categories, editActions: [.move]) { $category in
+                        Button {
+                            categoryToEdit = category
+                        } label: {
+                            Toggle(isOn: $category.show) {
+                                HStack {
+                                    Text("\(category.name) (\(category.metricSystem.shortTitle))")
+                                    if category.protected {
+                                        Image(systemName: "lock")
+                                    }
+                                    Spacer()
                                 }
-                                Spacer()
+                            }
+                        }
+                        .foregroundColor(Color.textPrimary)
+                        .swipeActions {
+                            if !category.protected {
+                                Button("Удалить", role: .destructive) {
+                                    service.removeCategory(id: category.id)
+                                }
                             }
                         }
                     }
-                    .foregroundColor(Color.textPrimary)
-                    .swipeActions {
-                        if !category.protected {
-                            Button("Удалить", role: .destructive) {
-                                service.removeCategory(id: category.id)
-                            }
-                        }
+                } header: {
+                    HStack {
+                        Text("Категория")
+                        Spacer()
+                        Text("Показывать")
                     }
-                }
-            } header: {
-                HStack {
-                    Text("Категория")
-                    Spacer()
-                    Text("Показывать")
                 }
             }
         }
