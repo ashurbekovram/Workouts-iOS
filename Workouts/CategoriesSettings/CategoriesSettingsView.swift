@@ -47,6 +47,12 @@ struct CategoriesSettingsView: View {
                         }
                     }
                 }
+            } header: {
+                HStack {
+                    Text("Категория")
+                    Spacer()
+                    Text("Показывать")
+                }
             }
         }
         .toolbar {

@@ -9,6 +9,7 @@ import Foundation
 
 final class PersonalDataViewModel: ObservableObject {
     @Published var lastParameters: [Parameter] = []
+    @Published var addNewParametersPresented: Bool = false
 
     private let service = PersonalDataService.shared
 

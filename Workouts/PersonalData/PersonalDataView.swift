@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PersonalDataView: View {
     @StateObject private var viewModel = PersonalDataViewModel()
-
+    
     var body: some View {
         List {
             Section("Основное") {
@@ -28,9 +28,6 @@ struct PersonalDataView: View {
                 NavigationLink("Настроить параметры") {
                     CategoriesSettingsView()
                 }
-                NavigationLink("Добавить данные") {
-                    EditParametersView()
-                }
             }
             Section("Последние данные") {
                 if !viewModel.lastParameters.isEmpty {
@@ -48,14 +45,26 @@ struct PersonalDataView: View {
                 }
             }
         }
-        .navigationDestination(for: Parameter.self) { parameter in
-            CategoryDetailView(category: parameter.category)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Добавить") {
+                    viewModel.addNewParametersPresented.toggle()
+                }
+            }
         }
         .navigationTitle("Мои данные")
         .scrollContentBackground(.hidden)
         .background(Color.backgroundPrimary.ignoresSafeArea())
         .safeAreaInset(edge: .top) {
             Spacer().frame(height: 8)
+        }
+        .navigationDestination(for: Parameter.self) { parameter in
+            CategoryDetailView(category: parameter.category)
+        }
+        .sheet(isPresented: $viewModel.addNewParametersPresented) {
+            NavigationStack {
+                EditParametersView()
+            }
         }
     }
 }

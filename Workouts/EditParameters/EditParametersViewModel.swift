@@ -11,7 +11,6 @@ final class EditParametersViewModel: ObservableObject {
     private let service =  PersonalDataService.shared
 
     @Published var parameters: [EditParametersFieldProps] = []
-    @Published var newCategoryPresented: Bool = false
 
     init() {
         bind()

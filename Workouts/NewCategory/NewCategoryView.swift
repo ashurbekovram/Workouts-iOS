@@ -44,12 +44,14 @@ struct NewCategoryView: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.backgroundPrimary.ignoresSafeArea())
-        .navigationTitle("Новая категория")
+        .navigationTitle(id == nil ? "Новая категория" : "Редактирование")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Сохранить", role: nil) {
+                Button {
                     save()
+                } label: {
+                    Text("Сохранить").fontWeight(.semibold)
                 }
                 .disabled(name.count < 3)
             }
