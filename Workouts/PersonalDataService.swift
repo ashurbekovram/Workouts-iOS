@@ -38,9 +38,10 @@ final class PersonalDataService: ObservableObject {
 
     func saveParameters(_ newParameters: [Parameter]) {
         parameters.append(contentsOf: newParameters)
-        if let data = try? JSONEncoder().encode(parameters) {
-            UserDefaults.standard.set(data, forKey: PersonalDataKeys.parametersKey)
-        }
+    }
+
+    func removeParameter(id: UUID) {
+        parameters.removeAll { $0.id == id }
     }
 
     func saveCategory(_ category: Category) {
@@ -64,9 +65,19 @@ final class PersonalDataService: ObservableObject {
 
     private func bind() {
         $categories
+            .dropFirst()
             .sink { categories in
                 if let data = try? JSONEncoder().encode(categories) {
                     UserDefaults.standard.set(data, forKey: PersonalDataKeys.categoriesKey)
+                }
+            }
+            .store(in: &bag)
+
+        $parameters
+            .dropFirst()
+            .sink { parameters in
+                if let data = try? JSONEncoder().encode(parameters) {
+                    UserDefaults.standard.set(data, forKey: PersonalDataKeys.parametersKey)
                 }
             }
             .store(in: &bag)

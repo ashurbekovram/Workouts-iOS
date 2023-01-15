@@ -24,6 +24,10 @@ final class CategoryDetailViewModel: ObservableObject {
             }
             .store(in: &bag)
     }
+
+    func deleteParameter(id: UUID) {
+        service.removeParameter(id: id)
+    }
 }
 
 struct CategoryDetailView: View {
@@ -38,11 +42,16 @@ struct CategoryDetailView: View {
     var body: some View {
         List {
             Section {
-                ForEach(viewModel.parameters) { parameter in
+                ForEach($viewModel.parameters) { $parameter in
                     HStack {
                         Text(parameter.date.formatted(date: .abbreviated, time: .shortened))
                         Spacer()
                         Text(parameter.value.description + " " + parameter.category.metricSystem.shortTitle)
+                    }
+                    .swipeActions {
+                        Button("Удалить", role: .destructive) {
+                            viewModel.deleteParameter(id: parameter.id)
+                        }
                     }
                 }
             } header: {
