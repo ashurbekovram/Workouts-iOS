@@ -11,13 +11,21 @@ final class EditParametersViewModel: ObservableObject {
     private let service =  PersonalDataService.shared
 
     @Published var parameters: [EditParametersFieldProps] = []
+    @Published var date: Date = Date()
 
     init() {
         bind()
     }
 
     func save() {
-        let insertedParameters = parameters.compactMap { $0.toParameter() }
+        let insertedParameters = parameters.compactMap { parameter -> Parameter? in
+            guard let value = parameter.value,
+                  value > 0
+            else {
+                return nil
+            }
+            return Parameter(date: date, category: parameter.category, value: value)
+        }
         service.saveParameters(insertedParameters)
     }
 

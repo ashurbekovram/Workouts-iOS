@@ -20,15 +20,24 @@ struct EditParametersView: View {
                 Text("Нет сохранненых категорий")
             } else {
                 Section {
+                    DatePicker("Дата", selection: $viewModel.date)
+                }
+                Section {
                     ForEach($viewModel.parameters) { $parameter in
                         HStack {
-                            Text("\(parameter.category.name) (\(parameter.category.metricSystem.shortTitle))")
+                            Button {
+                                focusedCategory = parameter.category
+                            } label: {
+                                Text("\(parameter.category.name) (\(parameter.category.metricSystem.shortTitle))")
+                                    .foregroundColor(Color.textPrimary)
+                            }
                             Spacer()
                             TextField("0", value: $parameter.value, format: .number)
                                 .keyboardType(.decimalPad)
                                 .focused($focusedCategory, equals: parameter.category)
                                 .multilineTextAlignment(.trailing)
                                 .textFieldStyle(.automatic)
+                                .frame(width: 120)
                         }
                         .swipeActions(allowsFullSwipe: true) {
                             Button("Скрыть", role: .destructive) {
@@ -43,29 +52,26 @@ struct EditParametersView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
+            ToolbarItem(placement: .cancellationAction) {
                 Button("Отмена", role: .cancel) {
                     dismiss()
                 }
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .primaryAction) {
                 Button {
                     viewModel.save()
                     dismiss()
                 } label: {
                     Text("Сохранить").fontWeight(.semibold)
                 }
-                .disabled(!viewModel.parameters.contains { $0.toParameter() != nil })
+                .disabled(!viewModel.parameters.contains { ($0.value ?? 0) > 0 })
             }
         }
-        .scrollDismissesKeyboard(ScrollDismissesKeyboardMode.interactively)
-        .navigationTitle("Новые данные")
-        .navigationBarTitleDisplayMode(.inline)
         .scrollContentBackground(.hidden)
         .background(Color.backgroundPrimary.ignoresSafeArea())
-        .safeAreaInset(edge: .top) {
-            Spacer().frame(height: 8)
-        }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Новые данные")
+        .scrollDismissesKeyboard(.interactively)
         .onAppear {
             if focusedCategory == nil {
                 focusedCategory = viewModel.parameters.first?.category

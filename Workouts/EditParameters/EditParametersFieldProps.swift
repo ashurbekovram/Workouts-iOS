@@ -14,13 +14,4 @@ struct EditParametersFieldProps: Identifiable, Hashable {
 
     let category: Category
     var value: Double?
-
-    func toParameter() -> Parameter? {
-        guard let value,
-              value > 0
-        else {
-            return nil
-        }
-        return Parameter(category: category, value: value)
-    }
 }
