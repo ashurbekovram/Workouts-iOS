@@ -12,7 +12,6 @@ struct CategoriesSettingsView: View {
 
     @State private var categoryToEdit: Category?
     @State private var newCategoryPresented: Bool = false
-    @State private var presentAlert: Bool = false
 
     var body: some View {
         List {
